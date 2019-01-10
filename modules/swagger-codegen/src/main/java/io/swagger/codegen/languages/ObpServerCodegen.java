@@ -16,8 +16,8 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
         embeddedTemplateDir = templateDir = "obp";
-        apiPackage = "io.swagger.server.api";
-        modelPackage = "io.swagger.server.model";
+        apiPackage = "code.api.builder";
+        modelPackage = "code.api.builder.model";
 
         setReservedWordsLowerCase(
                 Arrays.asList(
@@ -60,6 +60,23 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         additionalProperties.put(CodegenConstants.GROUP_ID, groupId);
         additionalProperties.put(CodegenConstants.ARTIFACT_ID, artifactId);
         additionalProperties.put(CodegenConstants.ARTIFACT_VERSION, artifactVersion);
+        
+        supportingFiles.add(new SupportingFile("pom.xml", "", "pom.xml"));
+        supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
+        supportingFiles.add(new SupportingFile("roadmap.md", "", "roadmap.md"));
+        supportingFiles.add(new SupportingFile("Akka.README.md", "", "Akka.README.md"));
+        supportingFiles.add(new SupportingFile("./src/main/resources/logback.xml", "/src/main/resources", "logback.xml"));
+        supportingFiles.add(new SupportingFile("./src/main/resources/props/default.props", "/src/main/resources/props/", "default.props"));
+        supportingFiles.add(new SupportingFile("./src/main/scala/bootstrap/liftweb/Boot.scala", "src/main/scala/bootstrap/liftweb/", "Boot.scala"));
+        supportingFiles.add(new SupportingFile(".gitignore", "", ".gitignore"));
+        supportingFiles.add(new SupportingFile("cheat_sheet.md", "", "cheat_sheet.md"));
+        supportingFiles.add(new SupportingFile("CONTRIBUTING.md", "", "CONTRIBUTING.md"));
+        supportingFiles.add(new SupportingFile("FAQ.md", "", "FAQ.md"));
+        supportingFiles.add(new SupportingFile("formParam.mustache", "", "formParam.mustache"));
+        supportingFiles.add(new SupportingFile("formParamMustache.mustache", "", "formParamMustache.mustache"));
+        supportingFiles.add(new SupportingFile("GNU_AFFERO_GPL_V3_19_Nov_1997.txt", "", "GNU_AFFERO_GPL_V3_19_Nov_1997.txt"));
+        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
+        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
 
         //TODO Will remove
 
