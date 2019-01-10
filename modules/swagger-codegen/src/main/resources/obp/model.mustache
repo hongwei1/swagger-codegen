@@ -1,0 +1,26 @@
+{{>licenseInfo}}
+package code.model.genmodel
+
+import code.model._
+import net.liftweb.mapper._
+
+{{#imports}}import {{import}}
+{{/imports}}
+
+{{#models}}
+{{#model}}
+class {{classname}} extends LongKeyedMapper[classname] with IdPK with CreatedUpdated {
+  {{#vars}}
+  {{#description}}
+/* {{{description}}} */
+  {{/description}}
+  {{^-first}}
+  object {{name}} extends {{datatype}}
+  {{/-first}}
+  {{/vars}}
+}
+object classname extends classname with LongKeyedMetaMapper[classname]
+
+{{/model}}
+{{/models}}
+
