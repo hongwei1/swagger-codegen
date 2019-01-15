@@ -11,12 +11,12 @@ import net.liftweb.mapper._
 {{#model}}
 class {{classname}} extends LongKeyedMapper[classname] with IdPK with CreatedUpdated {
   {{#vars}}
+  {{^isInherited}}
   {{#description}}
 /* {{{description}}} */
   {{/description}}
-  {{^-first}}
   object {{name}} extends {{datatype}}
-  {{/-first}}
+  {{/isInherited}}
   {{/vars}}
 }
 object classname extends classname with LongKeyedMetaMapper[classname]
