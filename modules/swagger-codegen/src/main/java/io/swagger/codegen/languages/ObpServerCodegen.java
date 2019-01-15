@@ -1,7 +1,11 @@
 package io.swagger.codegen.languages;
 
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 import io.swagger.codegen.*;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenConfig {
@@ -167,6 +171,27 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         }
 
         return objs;
+    }
+
+    @Override
+    public void processOpts() {
+        super.processOpts();
+        //TODO ADD lambda
+        additionalProperties.put("isNotId", new Mustache.Lambda() {
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                writer.write(fragment.execute().replaceAll("\\r|\\n", ""));
+            }
+        });
+    }
+
+    @Override
+    public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
+        super.postProcessModelProperty(model, property);
+
+        if ("id".equals(property.name) || "createdAt".equals("name")) {
+            property.isInherited = true;
+        }
     }
 
 }
