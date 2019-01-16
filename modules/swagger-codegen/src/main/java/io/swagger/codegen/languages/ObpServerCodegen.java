@@ -147,9 +147,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
-            // force http method to lower case
-            op.httpMethod = op.httpMethod.toLowerCase();
- 
+
             String[] items = op.path.split("/", -1);
             String scalaPath = "";
             int pathParamIndex = 0;
@@ -167,7 +165,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
                 }
             }
 
-            op.vendorExtensions.put("x-scalatra-path", scalaPath);
+            op.vendorExtensions.put("x-obp-path", scalaPath);
         }
 
         return objs;

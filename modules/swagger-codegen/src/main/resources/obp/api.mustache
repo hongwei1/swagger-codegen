@@ -26,46 +26,16 @@ trait APIMethods_APIBuilder { self: RestHelper =>
     implicit val formats = net.liftweb.json.DefaultFormats
     val TemplateNotFound = "OBP-31001: Template not found. Please specify a valid value for TEMPLATE_ID."
     def endpointsOfBuilderAPI = getTemplates :: getTemplate :: createTemplate :: deleteTemplate :: Nil
-    resourceDocs += ResourceDoc(getTemplates, apiVersion, "getTemplates", "GET", "/templates", "Get Templates", "Return All Templates", emptyObjectJson, templatesJson, List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
-    lazy val getTemplates: OBPEndpoint = {
-      case ("templates" :: Nil) JsonGet req =>
-        cc => {
-          for (u <- cc.user ?~ UserNotLoggedIn; templates <- APIBuilder_Connector.getTemplates; templatesJson = JsonFactory_APIBuilder.createTemplates(templates); jsonObject: JValue = decompose(templatesJson)) yield {
-            successJsonResponse(jsonObject)
-          }
-        }
-    }
-    resourceDocs += ResourceDoc(getTemplate, apiVersion, "getTemplate", "GET", "/templates/TEMPLATE_ID", "Get Template", "Return One Template By Id", emptyObjectJson, templateJson, List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
-    lazy val getTemplate: OBPEndpoint = {
-      case ("templates" :: templateId :: Nil) JsonGet _ =>
-        cc => {
-          for (u <- cc.user ?~ UserNotLoggedIn; template <- APIBuilder_Connector.getTemplateById(templateId) ?~! TemplateNotFound; templateJson = JsonFactory_APIBuilder.createTemplate(template); jsonObject: JValue = decompose(templateJson)) yield {
-            successJsonResponse(jsonObject)
-          }
-        }
-    }
-    resourceDocs += ResourceDoc(createTemplate, apiVersion, "createTemplate", "POST", "/templates", "Create Template", "Create One Template", createTemplateJson, templateJson, List(UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
-    lazy val createTemplate: OBPEndpoint = {
-      case ("templates" :: Nil) JsonPost json -> _ =>
-        cc => {
-          for (createTemplateJson <- tryo(json.extract[CreateTemplateJson]) ?~! InvalidJsonFormat; u <- cc.user ?~ UserNotLoggedIn; template <- APIBuilder_Connector.createTemplate(createTemplateJson); templateJson = JsonFactory_APIBuilder.createTemplate(template); jsonObject: JValue = decompose(templateJson)) yield {
-            successJsonResponse(jsonObject)
-          }
-        }
-    }
-    resourceDocs += ResourceDoc(deleteTemplate, apiVersion, "deleteTemplate", "DELETE", "/templates/TEMPLATE_ID", "Delete Template", "Delete One Template", emptyObjectJson, emptyObjectJson.copy("true"), List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
-    lazy val deleteTemplate: OBPEndpoint = {
-      case ("templates" :: templateId :: Nil) JsonDelete _ =>
-        cc => {
-          for (
-            u <- cc.user ?~ UserNotLoggedIn; 
-            template <- APIBuilder_Connector.getTemplateById(templateId) ?~! TemplateNotFound;
-            deleted <- APIBuilder_Connector.deleteTemplate(templateId)
-          ) yield {
-            if (deleted) noContentJsonResponse else errorJsonResponse("Delete not completed")
-          }
-        }
-    }
+    {{#operations}}
+        {{#operation}}
+            {{newline}}
+            resourceDocs += ResourceDoc(getTemplates, apiVersion, "getTemplates",
+            "{{httpMethod}}", "{{{vendorExtensions.x-obp-path}}}", "Get Templates",
+            "Return All Templates", emptyObjectJson, templatesJson,
+            List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
+        {{/operation}}
+    {{/operations}}
+
   }
 }
 
