@@ -31,7 +31,7 @@ trait APIMethods_APIBuilder { self: RestHelper =>
             {{newline}}
             resourceDocs += ResourceDoc(getTemplates, apiVersion, "getTemplates",
             "{{httpMethod}}", "{{{vendorExtensions.x-obp-path}}}", "Get Templates",
-            "Return All Templates", emptyObjectJson, templatesJson,
+            "{{{summary}}}", "{{{unescapedDescription}}}", templatesJson,
             List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
         {{/operation}}
     {{/operations}}
