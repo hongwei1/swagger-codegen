@@ -7,20 +7,20 @@ import net.liftweb.mapper._
 {{#imports}}import {{import}}
 {{/imports}}
 
-{{#models}}
-{{#model}}
-class {{classname}} extends LongKeyedMapper[classname] with IdPK with CreatedUpdated {
-  {{#vars}}
-  {{^isInherited}}
-  {{#description}}
-/* {{{description}}} */
-  {{/description}}
-  object {{name}} extends {{datatype}}
-  {{/isInherited}}
-  {{/vars}}
-}
-object classname extends classname with LongKeyedMetaMapper[classname]
-
-{{/model}}
-{{/models}}
+//{{#models}}
+//{{#model}}
+//class {{classname}} extends LongKeyedMapper[classname] with IdPK with CreatedUpdated {
+//  {{#vars}}
+//  {{^isInherited}}
+//  {{#description}}
+///* {{{description}}} */
+//  {{/description}}
+//  object {{name}} extends {{datatype}}
+//  {{/isInherited}}
+//  {{/vars}}
+//}
+//object classname extends classname with LongKeyedMetaMapper[classname]
+//
+//{{/model}}
+//{{/models}}
 
