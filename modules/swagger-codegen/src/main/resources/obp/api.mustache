@@ -28,7 +28,8 @@ trait APIMethods_APIBuilder { self: RestHelper =>
     val codeContext = CodeContext(resourceDocs, apiRelations)
     implicit val formats = net.liftweb.json.DefaultFormats
     val TemplateNotFound = "OBP-31001: Template not found. Please specify a valid value for TEMPLATE_ID."
-    def endpointsOfBuilderAPI = getTemplates :: getTemplate :: createTemplate :: deleteTemplate :: Nil
+    def endpointsOfBuilderAPI = {{#operations}}{{#operation}}{{operationId}} ::
+                            {{/operation}}{{/operations}}Nil
     {{#operations}}
         {{#operation}}
             {{newline}}
