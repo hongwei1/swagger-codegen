@@ -151,22 +151,31 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 
             String[] items = op.path.split("/", -1);
             String scalaPath = "";
+            String endpointPath = "";
             int pathParamIndex = 0;
 
             for (int i = 0; i < items.length; ++i) {
                 if (items[i].matches("^\\{(.*)\\}$")) { // wrap in {}
-                    scalaPath = scalaPath + ":" + items[i].replace("{", "").replace("}", "");
+                    String param = items[i].replace("{", "").replace("}", "").replace('-', '_');
+                    scalaPath = scalaPath + param.toUpperCase();
+                    endpointPath = endpointPath + " :: " + param.toLowerCase();
                     pathParamIndex++;
                 } else {
                     scalaPath = scalaPath + items[i];
+                    if(StringUtils.isNotBlank(items[i])){
+                        String infix = StringUtils.isBlank(endpointPath) ? "\"" : ":: \"";
+                        endpointPath = endpointPath + infix + items[i] + "\"";
+                    }
                 }
 
                 if (i != items.length -1) {
                     scalaPath = scalaPath + "/";
                 }
             }
+            endpointPath += " :: Nil";
 
             op.vendorExtensions.put("x-obp-path", scalaPath);
+            op.vendorExtensions.put("endpointPath", endpointPath);
             op.vendorExtensions.put("jsonMethod", "Json"+ StringUtils.capitalize(op.httpMethod.toLowerCase()));
         }
 
