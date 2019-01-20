@@ -29,10 +29,22 @@ trait APIMethods_APIBuilder { self: RestHelper =>
     {{#operations}}
         {{#operation}}
             {{newline}}
-            resourceDocs += ResourceDoc(getTemplates, apiVersion, "getTemplates",
-            "{{httpMethod}}", "{{{vendorExtensions.x-obp-path}}}", "Get Templates",
-            "{{{summary}}}", "{{{unescapedDescription}}}", templatesJson,
+            resourceDocs += ResourceDoc({{operationId}}, apiVersion, "{{operationId}}",
+            "{{httpMethod}}", "{{{vendorExtensions.x-obp-path}}}", "{{{summary}}}",
+            "{{{unescapedDescription}}}", emptyObjectJson, templatesJson,
             List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
+
+            lazy val {{operationId}} : OBPEndpoint = {
+                  //get private accounts for one bank
+                  case "funds-confirmations" :: Nil JsonPost _ => {
+                    cc =>
+                      for {
+                        (Full(u), callContext) <- authorizeEndpoint(NotImplemented, cc)
+                        } yield {
+                        (emptyObjectJson, callContext)
+                      }
+                  }
+                }
         {{/operation}}
     {{/operations}}
 
