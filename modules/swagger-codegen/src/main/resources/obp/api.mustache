@@ -20,6 +20,8 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+import code.api.berlin.group.v1_3.OBP_BERLIN_GROUP_1_3.{addEndpints, addResourceDocs}
+
 trait APIMethods_{{classname}} { self: RestHelper =>
   val Implementations{{classname}} = new Object() {
     val apiVersion: ApiVersion = ApiVersion.berlinGroupV1_3
@@ -27,7 +29,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
     val apiRelations = ArrayBuffer[ApiRelation]()
     val codeContext = CodeContext(resourceDocs, apiRelations)
     implicit val formats = net.liftweb.json.DefaultFormats
-    def endpointsOf{{classname}}  = {{#operations}}{{#operation}}{{operationId}} ::
+    val endpoints = {{#operations}}{{#operation}}{{operationId}} ::
                             {{/operation}}{{/operations}}Nil
     {{#operations}}
         {{#operation}}
@@ -39,7 +41,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
 
             lazy val {{operationId}} : OBPEndpoint = {
                   //get private accounts for one bank
-                  case "funds-confirmations" :: Nil JsonPost _ => {
+                  case "funds-confirmations" :: Nil {{vendorExtensions.jsonMethod}} _ => {
                     cc =>
                       for {
                         (Full(u), callContext) <- authorizeEndpoint(NotImplemented, cc)
@@ -51,6 +53,8 @@ trait APIMethods_{{classname}} { self: RestHelper =>
         {{/operation}}
     {{/operations}}
 
+    addEndpints(endpoints)
+    addResourceDocs(resourceDocs)
   }
 }
 

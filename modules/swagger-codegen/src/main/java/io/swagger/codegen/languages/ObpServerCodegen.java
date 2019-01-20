@@ -3,6 +3,7 @@ package io.swagger.codegen.languages;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 import io.swagger.codegen.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -166,6 +167,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             }
 
             op.vendorExtensions.put("x-obp-path", scalaPath);
+            op.vendorExtensions.put("jsonMethod", "Json"+ StringUtils.capitalize(op.httpMethod.toLowerCase()));
         }
 
         return objs;
