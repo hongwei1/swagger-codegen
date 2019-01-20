@@ -20,15 +20,14 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait APIMethods_APIBuilder { self: RestHelper =>
-  val ImplementationsBuilderAPI = new Object() {
-    val apiVersion: ApiVersion = ApiVersion.apiBuilder
+trait APIMethods_{{classname}} { self: RestHelper =>
+  val Implementations{{classname}} = new Object() {
+    val apiVersion: ApiVersion = ApiVersion.berlinGroupV1_3
     val resourceDocs = ArrayBuffer[ResourceDoc]()
     val apiRelations = ArrayBuffer[ApiRelation]()
     val codeContext = CodeContext(resourceDocs, apiRelations)
     implicit val formats = net.liftweb.json.DefaultFormats
-    val TemplateNotFound = "OBP-31001: Template not found. Please specify a valid value for TEMPLATE_ID."
-    def endpointsOfBuilderAPI = {{#operations}}{{#operation}}{{operationId}} ::
+    def endpointsOf{{classname}}  = {{#operations}}{{#operation}}{{operationId}} ::
                             {{/operation}}{{/operations}}Nil
     {{#operations}}
         {{#operation}}
@@ -36,7 +35,7 @@ trait APIMethods_APIBuilder { self: RestHelper =>
             resourceDocs += ResourceDoc({{operationId}}, apiVersion, "{{operationId}}",
             "{{httpMethod}}", "{{{vendorExtensions.x-obp-path}}}", "{{{summary}}}",
             "{{{unescapedDescription}}}", emptyObjectJson, templatesJson,
-            List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagApiBuilder :: Nil)
+            List(UserNotLoggedIn, UnknownError), Catalogs(notCore, notPSD2, notOBWG), apiTagAIS :: Nil)
 
             lazy val {{operationId}} : OBPEndpoint = {
                   //get private accounts for one bank
