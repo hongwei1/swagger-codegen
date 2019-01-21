@@ -46,16 +46,16 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        emptyObjectJson,
        List(UserNotLoggedIn, UnknownError), 
        Catalogs(notCore, notPSD2, notOBWG), 
-       apiTagAIS :: Nil
+       {{classname}} :: Nil
      )
 
      lazy val {{operationId}} : OBPEndpoint = {
        case {{{vendorExtensions.endpointPath}}} {{vendorExtensions.jsonMethod}} _ => {
          cc =>
            for {
-             (Full(u), callContext) <- authorizeEndpoint(NotImplemented, cc)
+             (Full(u), callContext) <- authorizeEndpoint(UserNotLoggedIn, cc)
              } yield {
-             (emptyObjectJson, callContext)
+             (NotImplemented, callContext)
            }
          }
        }
