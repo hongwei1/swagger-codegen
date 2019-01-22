@@ -43,7 +43,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        "{{{summary}}}",
        "{{{unescapedDescription}}}", 
        emptyObjectJson, 
-       emptyObjectJson,
+       """{{{vendorExtensions.obp-responseBody}}}""",
        List(UserNotLoggedIn, UnknownError), 
        Catalogs(notCore, notPSD2, notOBWG), 
        {{classname}} :: Nil
