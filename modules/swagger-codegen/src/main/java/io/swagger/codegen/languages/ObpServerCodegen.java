@@ -204,9 +204,74 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
 
+        model.classname = model.classname.replaceAll("\\.","_").replaceAll("\\-","_");
+        
         if ("id".equals(property.name) || "createdAt".equals("name")) {
             property.isInherited = true;
         }
+        
+//        model.name = model.name.replaceAll(".","_").replaceAll("-","_");
+//        model.classVarName = model.classVarName.replaceAll(".","_").replaceAll("-","_");
+//        model.classFilename = model.classVarName.replaceAll(".","_").replaceAll("-","_");
     }
+    
+//    // override with any special post-processing for all models
+//    @SuppressWarnings({ "static-method", "unchecked" })
+//    @Override
+//    public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
+//        if (supportsInheritance) {
+//            // Index all CodegenModels by model name.
+//            Map<String, CodegenModel> allModels = new HashMap<String, CodegenModel>();
+//            for (Map.Entry<String, Object> entry : objs.entrySet()) {
+//                String modelName = toModelName(entry.getKey());
+//                Map<String, Object> inner = (Map<String, Object>) entry.getValue();
+//                List<Map<String, Object>> models = (List<Map<String, Object>>) inner.get("models");
+//                for (Map<String, Object> mo : models) {
+//                    CodegenModel cm = (CodegenModel) mo.get("model");
+//                    allModels.put(modelName, cm);
+//                }
+//            }
+//            // Fix up all parent and interface CodegenModel references.
+//            for (CodegenModel cm : allModels.values()) {
+//                if (cm.parent != null) {
+//                    cm.parentModel = allModels.get(cm.parent);
+//                }
+//                if (cm.interfaces != null && !cm.interfaces.isEmpty()) {
+//                    cm.interfaceModels = new ArrayList<CodegenModel>(cm.interfaces.size());
+//                    for (String intf : cm.interfaces) {
+//                        CodegenModel intfModel = allModels.get(intf);
+//                        if (intfModel != null) {
+//                            cm.interfaceModels.add(intfModel);
+//                        }
+//                    }
+//                }
+//            }
+//            // Let parent know about all its children
+//            for (String name : allModels.keySet()) {
+//                CodegenModel cm = allModels.get(name);
+//                CodegenModel parent = allModels.get(cm.parent);
+//                // if a discriminator exists on the parent, don't add this child to the inheritance hierarchy
+//                // TODO Determine what to do if the parent discriminator name == the grandparent discriminator name
+//                while (parent != null) {
+//                    if (parent.children == null) {
+//                        parent.children = new ArrayList<CodegenModel>();
+//                    }
+//                    parent.children.add(cm);
+//                    if (parent.discriminator == null) {
+//                        parent = allModels.get(parent.parent);
+//                    } else {
+//                        parent = null;
+//                    }
+//                }
+//            }
+//        } else{
+//            // Index all CodegenModels by model name.
+//            Map<String, CodegenModel> allModels = new HashMap<String, CodegenModel>();
+//            for (Map.Entry<String, Object> entry : objs.entrySet()) {
+//                String modelName = toModelName(entry.getKey()).replace("\\.","_");
+//            }
+//        }
+//        return objs;
+//    }
 
 }
