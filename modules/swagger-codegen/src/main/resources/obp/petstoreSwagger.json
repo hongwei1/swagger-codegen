@@ -780,6 +780,10 @@
         "summary": "Updated user",
         "description": "This can only be done by the logged in user.",
         "operationId": "updateUser",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
         "produces": [
           "application/xml",
           "application/json"
