@@ -210,17 +210,15 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
 
-        model.classname = model.classname.replaceAll("\\.","_").replaceAll("\\-","_");
-        
-        if ("id".equals(property.name) || "createdAt".equals("name")) {
+        if ("id".equals(property.name) || "createdAt".equals(property.name) || "updatedAt".equals(property.name)) {
             property.isInherited = true;
         }
-        
-//        model.name = model.name.replaceAll(".","_").replaceAll("-","_");
-//        model.classVarName = model.classVarName.replaceAll(".","_").replaceAll("-","_");
-//        model.classFilename = model.classVarName.replaceAll(".","_").replaceAll("-","_");
     }
-    
+
+    @Override
+    public String toModelName(final String name){
+        return super.toModelName(name).replaceAll("[^\\w\\$]", "_");
+    }
 //    // override with any special post-processing for all models
 //    @SuppressWarnings({ "static-method", "unchecked" })
 //    @Override
