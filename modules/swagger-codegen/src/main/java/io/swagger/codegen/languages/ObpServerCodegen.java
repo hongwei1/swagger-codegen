@@ -3,6 +3,8 @@ package io.swagger.codegen.languages;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 import io.swagger.codegen.*;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -198,10 +200,10 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     public void processOpts() {
         super.processOpts();
         //TODO ADD lambda
-        additionalProperties.put("isNotId", new Mustache.Lambda() {
+        additionalProperties.put("capitalize", new Mustache.Lambda() {
             @Override
             public void execute(Template.Fragment fragment, Writer writer) throws IOException {
-                writer.write(fragment.execute().replaceAll("\\r|\\n", ""));
+                writer.write(StringUtils.capitalize(fragment.execute()));
             }
         });
     }
@@ -217,7 +219,24 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 
     @Override
     public String toModelName(final String name){
-        return super.toModelName(name).replaceAll("[^\\w\\$]", "_");
+        return super.toModelName(name).replaceAll("[\\.\\-]", "_");
+    }
+
+    @Override
+    public CodegenModel fromModel(String name, Model model, Map<String, Model> allDefinitions) {
+        CodegenModel codegenModel = super.fromModel(name, model, allDefinitions);
+
+        if(codegenModel.vendorExtensions == null) {
+            codegenModel.vendorExtensions = new HashMap<>();
+        }
+
+        if(model.getProperties() == null || model.getProperties().isEmpty()) {
+            codegenModel.vendorExtensions.put("isPrimary", true);
+        }
+        if(model instanceof ModelImpl) {
+            codegenModel.vendorExtensions.put("originalType", ((ModelImpl) model).getType());
+        }
+        return codegenModel;
     }
 //    // override with any special post-processing for all models
 //    @SuppressWarnings({ "static-method", "unchecked" })
