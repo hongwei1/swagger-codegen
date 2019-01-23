@@ -178,8 +178,15 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
                  responseBody = "" ;
              else 
                  responseBody = op.examples.get(0).get("example");
+             
+             String requestBody ="";
+             if (op.requestBodyExamples==null) 
+                 requestBody = "" ;
+             else 
+                 requestBody = op.requestBodyExamples.get(0).get("example");
             
             op.vendorExtensions.put("obp-responseBody", responseBody);
+            op.vendorExtensions.put("obp-requestBody", requestBody);
             op.vendorExtensions.put("x-obp-path", scalaPath);
             op.vendorExtensions.put("endpointPath", endpointPath);
             op.vendorExtensions.put("jsonMethod", "Json"+ StringUtils.capitalize(op.httpMethod.toLowerCase()));
