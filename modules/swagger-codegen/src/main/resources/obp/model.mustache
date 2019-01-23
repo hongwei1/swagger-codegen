@@ -21,7 +21,7 @@ class {{classname}} extends LongKeyedMapper[{{classname}}] with IdPK with Create
           {{#description}}
             /* {{{description}}} */
           {{/description}}
-      object {{name}} extends {{datatype}}
+          {{#commentList}} object {{name}} extends {{datatype}}{{/commentList}}
       {{/isInherited}}
   {{/vars}}
 }
