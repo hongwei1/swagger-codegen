@@ -2,26 +2,26 @@
 package code.model.genmodel
 import net.liftweb.mapper._
 
-{{#imports}}import {{import}}
-{{/imports}}
-
-{{#models}}
-    {{#model}}
-class {{classname}} extends LongKeyedMapper[{{classname}}] with IdPK with CreatedUpdated {
-  override def getSingleton = {{classname}}
-
-  {{#vars}}
-      {{^isInherited}}
-          {{#description}}
-            /* {{{description}}} */
-          {{/description}}
-      object {{name}} extends MappedString(this, 255)
-      {{/isInherited}}
-  {{/vars}}
-}
-object {{classname}} extends {{classname}} with LongKeyedMetaMapper[{{classname}}]
-    
-    {{/model}}
-{{/models}}
+//{{#imports}}import {{import}}
+//{{/imports}}
+//
+//{{#models}}
+//    {{#model}}
+//class {{classname}} extends LongKeyedMapper[{{classname}}] with IdPK with CreatedUpdated {
+//  override def getSingleton = {{classname}}
+//
+//  {{#vars}}
+//      {{^isInherited}}
+//          {{#description}}
+//            /* {{{description}}} */
+//          {{/description}}
+//      object {{name}} extends MappedString(this, 255)
+//      {{/isInherited}}
+//  {{/vars}}
+//}
+//object {{classname}} extends {{classname}} with LongKeyedMetaMapper[{{classname}}]
+//    
+//    {{/model}}
+//{{/models}}
 
 
