@@ -1,6 +1,7 @@
 package code.api.builder.{{classname}}
 import java.util.UUID
 
+import code.api.berlin.group.v1_3.JvalueString
 import code.api.builder.{APIBuilder_Connector, CreateTemplateJson, JsonFactory_APIBuilder}
 import code.api.builder.JsonFactory_APIBuilder._
 import code.api.util.APIUtil._
@@ -27,6 +28,8 @@ trait APIMethods_{{classname}} { self: RestHelper =>
     val apiRelations = ArrayBuffer[ApiRelation]()
     val codeContext = CodeContext(resourceDocs, apiRelations)
     implicit val formats = net.liftweb.json.DefaultFormats
+    protected implicit def JvalueToSuper(in: JValue): JvalueString = JvalueString(in)
+
     val endpoints =
       {{#operations}}{{#operation}}{{operationId}} ::
       {{/operation}}{{/operations}}Nil
@@ -42,7 +45,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
        "{{{unescapedDescription}}}", 
-       """{{{vendorExtensions.obp-requestBody}}}""",
+       JvalueToSuper(json.parse("""{{{vendorExtensions.obp-requestBody}}}""")),
        """{{{vendorExtensions.obp-responseBody}}}""",
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
