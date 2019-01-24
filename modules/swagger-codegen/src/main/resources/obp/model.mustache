@@ -2,45 +2,45 @@
 package code.model.genmodel
 import net.liftweb.mapper._
 
-//{{#imports}}import {{import}}
-//{{/imports}}
-//
-//{{#models}}
-//{{#model}}
-//{{#description}}
-///**
-//* {{{description}}}
-//**/
-//{{/description}}
-//{{^vendorExtensions.isPrimary}}
-//class {{classname}} extends LongKeyedMapper[{{classname}}] with IdPK with CreatedUpdated {
-//  override def getSingleton = {{classname}}
-//
-//  {{#vars}}
-//      {{^isInherited}}
-//          {{#description}}
-//            /* {{{description}}} */
-//          {{/description}}
-//      object {{name}} extends {{datatype}}
-//      {{/isInherited}}
-//  {{/vars}}
-//}
-//object {{classname}} extends {{classname}} with LongKeyedMetaMapper[{{classname}}]
-//{{/vendorExtensions.isPrimary}}
-//
-//{{#vendorExtensions.isPrimary}}
-//{{#isEnum}}
-//    {{#allowableValues}}
-//object {{classname}} extends Enumeration {
-//    type {{classname}} = Value
-//    val {{#values}}{{^-first}}, {{/-first}}{{this}}{{/values}} = Value
-//}
-//    {{/allowableValues}}
-//{{/isEnum}}
-//
-//{{^isEnum}}case class {{classname}}(value: {{#capitalize}}{{vendorExtensions.originalType}}{{/capitalize}}){{/isEnum}}
-//{{/vendorExtensions.isPrimary}}
-//    {{/model}}
-//{{/models}}
+{{#imports}}import {{import}}
+{{/imports}}
+
+{{#models}}
+{{#model}}
+{{#description}}
+/**
+* {{{description}}}
+**/
+{{/description}}
+{{^vendorExtensions.isPrimary}}
+class {{classname}} extends LongKeyedMapper[{{classname}}] with IdPK with CreatedUpdated {
+  override def getSingleton = {{classname}}
+
+  {{#vars}}
+      {{^isInherited}}
+          {{#description}}
+            /* {{{description}}} */
+          {{/description}}
+          {{#commentList}} object {{name}} extends {{datatype}}{{/commentList}}
+      {{/isInherited}}
+  {{/vars}}
+}
+object {{classname}} extends {{classname}} with LongKeyedMetaMapper[{{classname}}]
+{{/vendorExtensions.isPrimary}}
+
+{{#vendorExtensions.isPrimary}}
+{{#isEnum}}
+    {{#allowableValues}}
+object {{classname}} extends Enumeration {
+    type {{classname}} = Value
+    val {{#values}}{{^-first}}, {{/-first}}{{this}}{{/values}} = Value
+}
+    {{/allowableValues}}
+{{/isEnum}}
+
+{{^isEnum}}case class {{classname}}(value: {{#capitalize}}{{vendorExtensions.originalType}}{{/capitalize}}){{/isEnum}}
+{{/vendorExtensions.isPrimary}}
+    {{/model}}
+{{/models}}
 
 

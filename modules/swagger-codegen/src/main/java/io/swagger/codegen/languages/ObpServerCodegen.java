@@ -206,6 +206,17 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
                 writer.write(StringUtils.capitalize(fragment.execute()));
             }
         });
+        // TODO remove this lambda, this is just to comment oneToMany relation  to make model pass compile
+        additionalProperties.put("commentList", new Mustache.Lambda() {
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                String content = fragment.execute();
+                if(StringUtils.contains(content, " List[")){
+                    content = "// " + content;
+                }
+                writer.write(content);
+            }
+        });
     }
 
     @Override
@@ -222,8 +233,23 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         return super.toModelName(name).replaceAll("[\\.\\-]", "_");
     }
 
+    private boolean flag = false;
     @Override
     public CodegenModel fromModel(String name, Model model, Map<String, Model> allDefinitions) {
+        //TODO this is a temp solution, it is ugly.
+        if(!flag) {
+            for (Map.Entry<String, Model> pair : allDefinitions.entrySet()) {
+                Model m = pair.getValue();
+                if (m instanceof ModelImpl) {
+                    if (((ModelImpl) m).getEnum() != null) {
+                        String className = toModelName(pair.getKey());
+                        typeMapping.put(className, "MappedEnum(this, " + className + ")");
+                    }
+                }
+            }
+            flag = true;
+        }
+
         CodegenModel codegenModel = super.fromModel(name, model, allDefinitions);
 
         if(codegenModel.vendorExtensions == null) {
@@ -236,6 +262,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         if(model instanceof ModelImpl) {
             codegenModel.vendorExtensions.put("originalType", ((ModelImpl) model).getType());
         }
+
         return codegenModel;
     }
 //    // override with any special post-processing for all models
