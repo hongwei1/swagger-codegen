@@ -1,7 +1,7 @@
 package code.api.builder.{{classname}}
 import java.util.UUID
 
-import code.api.berlin.group.v1_3.JvalueString
+import code.api.berlin.group.v1_3.JvalueCaseClass
 import code.api.builder.{APIBuilder_Connector, CreateTemplateJson, JsonFactory_APIBuilder}
 import code.api.builder.JsonFactory_APIBuilder._
 import code.api.util.APIUtil._
@@ -28,7 +28,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
     val apiRelations = ArrayBuffer[ApiRelation]()
     val codeContext = CodeContext(resourceDocs, apiRelations)
     implicit val formats = net.liftweb.json.DefaultFormats
-    protected implicit def JvalueToSuper(in: JValue): JvalueString = JvalueString(in)
+    protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
 
     val endpoints =
       {{#operations}}{{#operation}}{{operationId}} ::
@@ -45,8 +45,8 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
        "{{{unescapedDescription}}}", 
-       JvalueToSuper(json.parse("""{{{vendorExtensions.obp-requestBody}}}""")),
-       """{{{vendorExtensions.obp-responseBody}}}""",
+       json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
+       json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
        {{classname}} :: Nil
@@ -58,7 +58,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
            for {
              (Full(u), callContext) <- authorizeEndpoint(UserNotLoggedIn, cc)
              } yield {
-             (NotImplemented, callContext)
+             (json.parse("""{{{vendorExtensions.obp-responseBody}}}"""), callContext)
            }
          }
        }
