@@ -1,21 +1,22 @@
 package code.api.builder.{{classname}}
-import java.util.UUID
 
+import code.api.APIFailureNewStyle
 import code.api.berlin.group.v1_3.JvalueCaseClass
-import code.api.builder.{APIBuilder_Connector, CreateTemplateJson, JsonFactory_APIBuilder}
-import code.api.builder.JsonFactory_APIBuilder._
-import code.api.util.APIUtil._
-import code.api.util.ApiTag._
-import code.api.util.ApiVersion
+import net.liftweb.json
+import net.liftweb.json._
+import code.api.berlin.group.v1_3.JSONFactory_BERLIN_GROUP_1_3
+import code.api.util.APIUtil.{defaultBankId, _}
+import code.api.util.{ApiVersion, NewStyle}
 import code.api.util.ErrorMessages._
+import code.api.util.ApiTag._
+import code.api.util.NewStyle.HttpCode
+import code.bankconnectors.Connector
+import code.model._
+import code.util.Helper
+import code.views.Views
 import net.liftweb.common.Full
 import net.liftweb.http.rest.RestHelper
-import net.liftweb.json
-import net.liftweb.json.Extraction._
-import net.liftweb.json._
-import net.liftweb.mapper.By
-import net.liftweb.util.Helpers.tryo
-
+import com.github.dwickern.macros.NameOf.nameOf
 import scala.collection.immutable.Nil
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,7 +31,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
     implicit val formats = net.liftweb.json.DefaultFormats
     protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
 
-    val endpoints =
+    val endpoints = 
       {{#operations}}{{#operation}}{{operationId}} ::
       {{/operation}}{{/operations}}Nil
 
@@ -40,16 +41,17 @@ trait APIMethods_{{classname}} { self: RestHelper =>
      resourceDocs += ResourceDoc(
        {{operationId}}, 
        apiVersion, 
-       "{{operationId}}",
+       nameOf({{operationId}}),
        "{{httpMethod}}", 
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
-       "{{{unescapedDescription}}}", 
+       s"""${dummyDataText(true)}
+            {{{unescapedNotes}}}""", 
        json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
-       {{classname}} :: Nil
+       {{classname}} :: apiTagDummyData :: Nil
      )
 
      lazy val {{operationId}} : OBPEndpoint = {
