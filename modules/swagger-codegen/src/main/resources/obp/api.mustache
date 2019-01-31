@@ -45,13 +45,13 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        "{{httpMethod}}", 
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
-       s"""${dummyDataText(true)}
+       s"""${mockedDataText(true)}
             {{{unescapedNotes}}}""", 
        json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
-       {{classname}} :: apiTagDummyData :: Nil
+       {{classname}} :: apiTagMockedData :: Nil
      )
 
      lazy val {{operationId}} : OBPEndpoint = {

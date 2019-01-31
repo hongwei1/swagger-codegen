@@ -151,7 +151,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
 
-            String[] items = op.path.split("/", -1);
+            String[] items = op.path.replace("/v1","").split("/", -1);
             String scalaPath = "";
             String endpointPath = "";
             int pathParamIndex = 0;
@@ -160,7 +160,10 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
                 if (items[i].matches("^\\{(.*)\\}$")) { // wrap in {}
                     String param = items[i].replace("{", "").replace("}", "").replace('-', '_');
                     scalaPath = scalaPath + param.toUpperCase();
-                    endpointPath = endpointPath + " :: " + param.toLowerCase();
+                    if(endpointPath =="")
+                        endpointPath = param.toLowerCase();
+                    else 
+                        endpointPath = endpointPath + " :: " + param.toLowerCase();
                     pathParamIndex++;
                 } else {
                     scalaPath = scalaPath + items[i];
