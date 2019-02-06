@@ -20,7 +20,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     public ObpServerCodegen() {
         super();
         outputFolder = "generated-code/obp";
-        modelTemplateFiles.put("model.mustache", ".scala");
+//        modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
         embeddedTemplateDir = templateDir = "obp";
         apiPackage = "code.api.berlin.group.v1_3";
