@@ -148,6 +148,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     @Override
     public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
+        String resourceDocTag = "apiTag"+operations.get("classname").toString().replace("Api","");
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
 
@@ -190,6 +191,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             }
 
             op.vendorExtensions.put("obp-responseBody", responseBody);
+            op.vendorExtensions.put("obp-resourceDoc-tag", resourceDocTag);
             op.vendorExtensions.put("obp-requestBody", requestBody);
             op.vendorExtensions.put("x-obp-path", scalaPath);
             op.vendorExtensions.put("endpointPath", endpointPath);

@@ -51,7 +51,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
-       {{classname}} :: apiTagMockedData :: Nil
+       {{vendorExtensions.obp-resourceDoc-tag}} :: apiTagMockedData :: Nil
      )
 
      lazy val {{operationId}} : OBPEndpoint = {
