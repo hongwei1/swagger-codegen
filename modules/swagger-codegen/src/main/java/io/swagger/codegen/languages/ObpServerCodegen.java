@@ -16,6 +16,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     protected String groupId = "io.swagger";
     protected String artifactId = "swagger-server";
     protected String artifactVersion = "1.0.0";
+    protected List<String> apiClassNames = new ArrayList<>();
 
     public ObpServerCodegen() {
         super();
@@ -67,6 +68,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         additionalProperties.put(CodegenConstants.GROUP_ID, groupId);
         additionalProperties.put(CodegenConstants.ARTIFACT_ID, artifactId);
         additionalProperties.put(CodegenConstants.ARTIFACT_VERSION, artifactVersion);
+        additionalProperties.put("apiClassNames", this.apiClassNames);
         
 //        supportingFiles.add(new SupportingFile("pom.xml", "", "pom.xml"));
 //        supportingFiles.add(new SupportingFile("README.md", "", "README.md"));
@@ -84,7 +86,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 //        supportingFiles.add(new SupportingFile("GNU_AFFERO_GPL_V3_19_Nov_1997.txt", "", "GNU_AFFERO_GPL_V3_19_Nov_1997.txt"));
 //        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
 //        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
-
+        supportingFiles.add(new SupportingFile("apiCollector.mustache", (sourceFolder+"/" + this.apiPackage).replace('.', '/'), "ApiCollector.scala"));
         //TODO Will remove
 
         instantiationTypes.put("array", "ArrayList");
@@ -148,6 +150,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     @Override
     public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
+        apiClassNames.add((String) operations.get("classname"));
         String resourceDocTag = "apiTag"+operations.get("classname").toString().replace("Api","");
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
@@ -191,6 +194,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             }
 
             op.vendorExtensions.put("obp-responseBody", responseBody);
+            //TODO will delete if no mustache use it
             op.vendorExtensions.put("obp-resourceDoc-tag", resourceDocTag);
             op.vendorExtensions.put("obp-requestBody", requestBody);
             op.vendorExtensions.put("x-obp-path", scalaPath);
@@ -219,6 +223,13 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
                 if(StringUtils.contains(content, " List[")){
                     content = "// " + content;
                 }
+                writer.write(content);
+            }
+        });
+        additionalProperties.put("extractHost", new Mustache.Lambda() {
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                String content = fragment.execute().replaceFirst("(https?://(www.)?)([^.]+).+", "$3");
                 writer.write(content);
             }
         });

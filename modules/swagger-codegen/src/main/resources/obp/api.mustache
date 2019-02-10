@@ -1,4 +1,4 @@
-package code.api.builder.{{classname}}
+package {{package}}
 
 import code.api.APIFailureNewStyle
 import code.api.berlin.group.v1_3.JvalueCaseClass
@@ -21,14 +21,13 @@ import scala.collection.immutable.Nil
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import {{package}}.ApiCollector
+import code.api.util.ApiTag
 
-trait APIMethods_{{classname}} { self: RestHelper =>
-  val Implementations{{classname}} = new Object() {
-    val apiVersion: ApiVersion = ApiVersion.berlinGroupV1_3
+object APIMethods_{{classname}} extends RestHelper {
+    val apiVersion: ApiVersion =  ApiCollector.version
     val resourceDocs = ArrayBuffer[ResourceDoc]()
     val apiRelations = ArrayBuffer[ApiRelation]()
-    val codeContext = CodeContext(resourceDocs, apiRelations)
-    implicit val formats = net.liftweb.json.DefaultFormats
     protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
 
     val endpoints = 
@@ -51,7 +50,7 @@ trait APIMethods_{{classname}} { self: RestHelper =>
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
        Catalogs(notCore, notPSD2, notOBWG), 
-       {{vendorExtensions.obp-resourceDoc-tag}} :: apiTagMockedData :: Nil
+       {{#tags}}ApiTag("{{{name}}}") ::{{/tags}} apiTagMockedData :: Nil
      )
 
      lazy val {{operationId}} : OBPEndpoint = {
@@ -67,7 +66,6 @@ trait APIMethods_{{classname}} { self: RestHelper =>
         {{/operation}}
     {{/operations}}
 
-  }
 }
 
 
