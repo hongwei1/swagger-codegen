@@ -24,7 +24,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 //        modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
         embeddedTemplateDir = templateDir = "obp";
-        apiPackage = "code.api.berlin.group.v1_3";
+        apiPackage = "code.api.UKOpenBanking.v3_1_0";
         modelPackage = "code.api.berlin.group.v1_3.model";
 
         setReservedWordsLowerCase(
