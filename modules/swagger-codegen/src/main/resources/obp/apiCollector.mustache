@@ -60,12 +60,12 @@ object ApiCollector extends OBPRestHelper with MdcLoggable with ScannedApis {
 
   private[this] val endpoints =
     {{#apiClassNames}}
-        APIMethods_{{this}}.endpoints {{^-last}}++{{/-last}}
+    APIMethods_{{this}}.endpoints {{^-last}}++{{/-last}}
     {{/apiClassNames}}
 
   override val allResourceDocs: ArrayBuffer[ResourceDoc]  =
     {{#apiClassNames}}
-        APIMethods_{{this}}.resourceDocs {{^-last}}++{{/-last}}
+    APIMethods_{{this}}.resourceDocs {{^-last}}++{{/-last}}
     {{/apiClassNames}}
 
   private[this] def findResourceDoc(pf: OBPEndpoint): Option[ResourceDoc] = {
