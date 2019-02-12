@@ -25,7 +25,7 @@ import {{package}}.ApiCollector
 import code.api.util.ApiTag
 
 object APIMethods_{{classname}} extends RestHelper {
-    val apiVersion: ApiVersion =  ApiCollector.version
+    val apiVersion =  ApiCollector.apiVersion
     val resourceDocs = ArrayBuffer[ResourceDoc]()
     val apiRelations = ArrayBuffer[ApiRelation]()
     protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
