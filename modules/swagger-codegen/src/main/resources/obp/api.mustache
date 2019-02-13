@@ -4,7 +4,6 @@ import code.api.APIFailureNewStyle
 import code.api.berlin.group.v1_3.JvalueCaseClass
 import net.liftweb.json
 import net.liftweb.json._
-import code.api.berlin.group.v1_3.JSONFactory_BERLIN_GROUP_1_3
 import code.api.util.APIUtil.{defaultBankId, _}
 import code.api.util.{ApiVersion, NewStyle}
 import code.api.util.ErrorMessages._
@@ -25,7 +24,7 @@ import {{package}}.ApiCollector
 import code.api.util.ApiTag
 
 object APIMethods_{{classname}} extends RestHelper {
-    val apiVersion: ApiVersion =  ApiCollector.version
+    val apiVersion =  ApiCollector.apiVersion
     val resourceDocs = ArrayBuffer[ResourceDoc]()
     val apiRelations = ArrayBuffer[ApiRelation]()
     protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
@@ -45,7 +44,7 @@ object APIMethods_{{classname}} extends RestHelper {
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
        s"""${mockedDataText(true)}
-{{{unescapedNotes}}}""", 
+{{unescapedNotes}}""", 
        json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
