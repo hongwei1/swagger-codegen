@@ -257,6 +257,12 @@
             <artifactId>commons-cli</artifactId>
             <version>${commons-cli-version}</version>
         </dependency>
+        <!--parse html content to markdown-->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.40.18</version>
+        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
