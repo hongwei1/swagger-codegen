@@ -44,7 +44,7 @@ object APIMethods_{{classname}} extends RestHelper {
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
        s"""${mockedDataText(true)}
-            {{#html2md}}{{unescapedNotes}}{{/html2md}}
+            {{#html2md}}{{{unescapedNotes}}}{{/html2md}}
             """,
        json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
