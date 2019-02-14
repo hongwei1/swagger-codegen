@@ -1,5 +1,6 @@
 package io.swagger.codegen.languages;
 
+import com.overzealous.remark.Remark;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 import io.swagger.codegen.*;
@@ -17,6 +18,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     protected String artifactId = "swagger-server";
     protected String artifactVersion = "1.0.0";
     protected List<String> apiClassNames = new ArrayList<>();
+    protected Remark remark = new Remark();
 
     public ObpServerCodegen() {
         super();
@@ -230,6 +232,13 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             @Override
             public void execute(Template.Fragment fragment, Writer writer) throws IOException {
                 String content = fragment.execute().replaceFirst("(https?://(www.)?)([^.]+).+", "$3");
+                writer.write(content);
+            }
+        });
+        additionalProperties.put("html2md", new Mustache.Lambda() {
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                String content = remark.convertFragment(fragment.execute());
                 writer.write(content);
             }
         });

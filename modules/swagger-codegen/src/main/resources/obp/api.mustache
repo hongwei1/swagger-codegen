@@ -43,8 +43,8 @@ object APIMethods_{{classname}} extends RestHelper {
        "{{httpMethod}}", 
        "{{{vendorExtensions.x-obp-path}}}", 
        "{{{summary}}}",
-       s"""${mockedDataText(true)}
-{{unescapedNotes}}""", 
+       s"""{{#html2md}}${mockedDataText(true)}
+{{unescapedNotes}}{{/html2md}}""",
        json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
        json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
        List(UserNotLoggedIn, UnknownError),
