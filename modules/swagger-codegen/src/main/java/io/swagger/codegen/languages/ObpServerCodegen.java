@@ -185,17 +185,24 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             }
             endpointPath += " :: Nil";
 
-            String responseBody = "";
+            String responseBodyFromSwagger = "";
             if (op.examples != null) {
-                responseBody = op.examples.stream().filter(it -> "application/json".equals(it.get("contentType"))).map(it -> it.get("example")).findFirst().orElse("");
+                responseBodyFromSwagger = op.examples.stream().filter(it -> "application/json".equals(it.get("contentType"))).map(it -> it.get("example")).findFirst().orElse("");
             }
 
+            String obpResponseBody = "";
+            
+            if(responseBodyFromSwagger == "" ) 
+                obpResponseBody = "NotImplemented";
+            else
+                obpResponseBody = "json.parse("+responseBodyFromSwagger+")";
+                
             String requestBody = "";
             if(op.requestBodyExamples != null ) {
                 requestBody =  op.requestBodyExamples.stream().filter(it -> "application/json".equals(it.get("contentType"))).map(it-> it.get("example")).findFirst().orElse("");
             }
 
-            op.vendorExtensions.put("obp-responseBody", responseBody);
+            op.vendorExtensions.put("obp-responseBody", obpResponseBody);
             //TODO will delete if no mustache use it
             op.vendorExtensions.put("obp-resourceDoc-tag", resourceDocTag);
             op.vendorExtensions.put("obp-requestBody", requestBody);

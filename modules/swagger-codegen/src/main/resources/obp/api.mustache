@@ -59,7 +59,7 @@ object APIMethods_{{classname}} extends RestHelper {
            for {
              (Full(u), callContext) <- authorizeEndpoint(UserNotLoggedIn, cc)
              } yield {
-             (json.parse("""{{{vendorExtensions.obp-responseBody}}}"""), callContext)
+             ({{{vendorExtensions.obp-responseBody}}}, callContext)
            }
          }
        }
