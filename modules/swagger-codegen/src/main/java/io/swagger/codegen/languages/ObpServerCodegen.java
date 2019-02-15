@@ -7,7 +7,8 @@ import io.swagger.codegen.*;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import org.apache.commons.lang3.StringUtils;
-
+import com.vladsch.flexmark.convert.html.FlexmarkHtmlParser;
+  
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -195,7 +196,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             if(responseBodyFromSwagger == "" ) 
                 obpResponseBody = "NotImplemented";
             else
-                obpResponseBody = "json.parse("+responseBodyFromSwagger+")";
+                obpResponseBody = "json.parse(\"\"\""+responseBodyFromSwagger+"\"\"\")";
                 
             String requestBody = "";
             if(op.requestBodyExamples != null ) {
@@ -245,7 +246,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         additionalProperties.put("html2md", new Mustache.Lambda() {
             @Override
             public void execute(Template.Fragment fragment, Writer writer) throws IOException {
-                String content = remark.convertFragment(fragment.execute());
+                String content = FlexmarkHtmlParser.parse(fragment.execute());
                 writer.write(content);
             }
         });
