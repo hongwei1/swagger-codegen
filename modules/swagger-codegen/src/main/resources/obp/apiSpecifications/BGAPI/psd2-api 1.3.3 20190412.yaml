@@ -2948,7 +2948,7 @@ paths:
   /v1/funds-confirmations: 
     post:
       summary: Confirmation of Funds Request
-      description: 
+      description: |
         Creates a confirmation of funds request at the ASPSP.
         Checks whether a specific amount is available at point of time 
         of the request on an account linked to a given tuple card issuer(TPP)/card number, 

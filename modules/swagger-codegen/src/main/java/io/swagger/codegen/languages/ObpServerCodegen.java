@@ -196,7 +196,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             if(responseBodyFromSwagger == "" ) 
                 obpResponseBody = "NotImplemented";
             else
-                obpResponseBody = "json.parse(\"\"\""+responseBodyFromSwagger+"\"\"\")";
+                obpResponseBody = responseBodyFromSwagger;
                 
             String requestBody = "";
             if(op.requestBodyExamples != null ) {
