@@ -1,53 +1,72 @@
-{{>licenseInfo}}
-
 package {{package}}
 
-{{#imports}}import {{import}}
-{{/imports}}
+import code.api.APIFailureNewStyle
+import code.api.berlin.group.v1_3.JvalueCaseClass
+import net.liftweb.json
+import net.liftweb.json._
+import code.api.util.APIUtil.{defaultBankId, _}
+import code.api.util.{ApiVersion, NewStyle}
+import code.api.util.ErrorMessages._
+import code.api.util.ApiTag._
+import code.api.util.NewStyle.HttpCode
+import code.bankconnectors.Connector
+import code.model._
+import code.util.Helper
+import code.views.Views
+import net.liftweb.common.Full
+import net.liftweb.http.rest.RestHelper
+import com.github.dwickern.macros.NameOf.nameOf
+import scala.collection.immutable.Nil
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import {{package}}.ApiCollector
+import code.api.util.ApiTag
 
-import java.io.File
+object APIMethods_{{classname}} extends RestHelper {
+    val apiVersion =  ApiCollector.apiVersion
+    val resourceDocs = ArrayBuffer[ResourceDoc]()
+    val apiRelations = ArrayBuffer[ApiRelation]()
+    protected implicit def JvalueToSuper(what: JValue): JvalueCaseClass = JvalueCaseClass(what)
 
-import org.scalatra.ScalatraServlet
-import org.scalatra.swagger._
-import org.json4s._
-import org.json4s.JsonDSL._
-import org.scalatra.json.{ JValueResult, JacksonJsonSupport }
-import org.scalatra.servlet.{ FileUploadSupport, MultipartConfig, SizeConstraintExceededException }
+    val endpoints = 
+      {{#operations}}{{#operation}}{{operationId}} ::
+      {{/operation}}{{/operations}}Nil
 
-import scala.collection.JavaConverters._
+    {{#operations}}
+        {{#operation}}
+            {{newline}}
+     resourceDocs += ResourceDoc(
+       {{operationId}}, 
+       apiVersion, 
+       nameOf({{operationId}}),
+       "{{httpMethod}}", 
+       "{{{vendorExtensions.x-obp-path}}}", 
+       "{{{summary}}}",
+       s"""${mockedDataText(true)}
+            {{#html2md}}{{{unescapedNotes}}}{{/html2md}}
+            """,
+       json.parse("""{{{vendorExtensions.obp-requestBody}}}"""),
+       json.parse("""{{{vendorExtensions.obp-responseBody}}}"""),
+       List(UserNotLoggedIn, UnknownError),
+       Catalogs(notCore, notPSD2, notOBWG), 
+       {{#tags}}ApiTag("{{{name}}}") ::{{/tags}} apiTagMockedData :: Nil
+     )
 
-class {{classname}}(implicit val swagger: Swagger) extends ScalatraServlet
-  with FileUploadSupport
-  with JacksonJsonSupport
-  with SwaggerSupport {
-  protected implicit val jsonFormats: Formats = DefaultFormats
+     lazy val {{operationId}} : OBPEndpoint = {
+       case {{{vendorExtensions.endpointPath}}} {{vendorExtensions.jsonMethod}} _ => {
+         cc =>
+           for {
+             (Full(u), callContext) <- authorizedAccess(cc, UserNotLoggedIn)
+             } yield {
+            (json.parse("""{{{vendorExtensions.obp-responseBody}}}"""), callContext)
+           }
+         }
+       }
+        {{/operation}}
+    {{/operations}}
 
-  protected val applicationDescription: String = "{{classname}}"
-
-  before() {
-    contentType = formats("json")
-    response.headers += ("Access-Control-Allow-Origin" -> "*")
-  }
-{{#operations}}
-{{#operation}}
-  {{newline}}
-
-  val {{nickname}}Operation = (apiOperation[{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}}]("{{nickname}}")
-      summary "{{{summary}}}"
-      parameters({{#allParams}}{{>queryParam}}{{>pathParam}}{{>bodyParam}}{{>formParam}}{{>headerParam}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
-  )
-
-  {{httpMethod}}("{{{vendorExtensions.x-scalatra-path}}}",operation({{nickname}}Operation)) {
-    {{#allParams}}
-    {{#isFile}}val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}
-    {{^isFile}}{{#isPathParam}}
-      val {{paramName}} = params.getOrElse("{{paramName}}", halt(400)){{/isPathParam}}
-    {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}
-    {{/isFile}}
-    println("{{paramName}}: " + {{paramName}})
-  {{/allParams}}
-  }
-
-{{/operation}}
-{{/operations}}
 }
+
+
+

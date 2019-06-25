@@ -83,9 +83,9 @@
                     </execution>
                 </executions> -->
                 <configuration>
-                    <compilerSource>1.7</compilerSource>
-                    <compilerCompliance>1.7</compilerCompliance>
-                    <compilerTargetPlatform>1.7</compilerTargetPlatform>
+                    <compilerSource>1.8</compilerSource>
+                    <compilerCompliance>1.8</compilerCompliance>
+                    <compilerTargetPlatform>1.8</compilerTargetPlatform>
                     <lineEnding>LF</lineEnding>
                 </configuration>
             </plugin>
@@ -950,5 +950,8 @@
         <surefire-version>2.19.1</surefire-version>
         <jmockit-version>1.25</jmockit-version>
         <reflections-version>0.9.10</reflections-version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
     </properties>
 </project>

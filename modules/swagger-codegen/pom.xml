@@ -118,6 +118,14 @@
                     <configFile>${project.basedir}${file.separator}${project.parent.relativePath}${file.separator}eclipse-formatter.xml</configFile>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -249,6 +257,19 @@
             <artifactId>commons-cli</artifactId>
             <version>${commons-cli-version}</version>
         </dependency>
+        <!--parse html content to markdown-->
+        <dependency>
+            <groupId>com.kotcrab.remark</groupId>
+            <artifactId>remark</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.40.8</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
