@@ -27,8 +27,6 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 //        modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
         embeddedTemplateDir = templateDir = "obp";
-        apiPackage = "code.api.berlin.group.v1_3_1";
-        modelPackage = "code.api.berlin.group.v1_3_1.model";
 
         setReservedWordsLowerCase(
                 Arrays.asList(
@@ -89,7 +87,7 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
 //        supportingFiles.add(new SupportingFile("GNU_AFFERO_GPL_V3_19_Nov_1997.txt", "", "GNU_AFFERO_GPL_V3_19_Nov_1997.txt"));
 //        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
 //        supportingFiles.add(new SupportingFile("Harmony_Individual_Contributor_Assignment_Agreement.txt", "", "Harmony_Individual_Contributor_Assignment_Agreement.txt"));
-        supportingFiles.add(new SupportingFile("apiCollector.mustache", (sourceFolder+"/" + this.apiPackage).replace('.', '/'), "ApiCollector.scala"));
+
         //TODO Will remove
 
         instantiationTypes.put("array", "ArrayList");
@@ -218,6 +216,14 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
     @Override
     public void processOpts() {
         super.processOpts();
+        if (!additionalProperties.containsKey(CodegenConstants.API_PACKAGE)) {
+            this.setApiPackage("code.api.berlin.group.v1_3_1");
+
+        }
+        if (!additionalProperties.containsKey(CodegenConstants.MODEL_PACKAGE) && StringUtils.isNotBlank(this.apiPackage)) {
+            this.setModelPackage(this.apiPackage + ".model");
+        }
+        supportingFiles.add(new SupportingFile("apiCollector.mustache", (sourceFolder+"/" + this.apiPackage).replace('.', '/'), "ApiCollector.scala"));
         //TODO ADD lambda
         additionalProperties.put("capitalize", new Mustache.Lambda() {
             @Override
