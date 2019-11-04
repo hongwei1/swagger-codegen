@@ -252,7 +252,8 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         additionalProperties.put("html2md", new Mustache.Lambda() {
             @Override
             public void execute(Template.Fragment fragment, Writer writer) throws IOException {
-                String content = FlexmarkHtmlParser.parse(fragment.execute());
+                String content = FlexmarkHtmlParser.parse(fragment.execute())
+                        .replaceAll("([^\\\\])?\\\\([^btnfr\\\\\"'])", "$1\\\\\\\\$2"); // replace \[ and\] with \\[ and \\]
                 writer.write(content);
             }
         });
