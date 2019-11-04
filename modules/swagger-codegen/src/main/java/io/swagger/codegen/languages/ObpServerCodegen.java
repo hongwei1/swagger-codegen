@@ -12,6 +12,8 @@ import com.vladsch.flexmark.convert.html.FlexmarkHtmlParser;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenConfig {
 
@@ -252,8 +254,12 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
         additionalProperties.put("html2md", new Mustache.Lambda() {
             @Override
             public void execute(Template.Fragment fragment, Writer writer) throws IOException {
-                String content = FlexmarkHtmlParser.parse(fragment.execute())
-                        .replaceAll("([^\\\\])?\\\\([^btnfr\\\\\"'])", "$1\\\\\\\\$2"); // replace \[ and\] with \\[ and \\]
+                String[] rawContent = StringUtils.split(fragment.execute(), '\n') ;
+                String content = Stream.of(rawContent)
+                    .map(FlexmarkHtmlParser::parse)
+                    .collect(Collectors.joining("\n"))
+                    .replaceAll("([^\\\\])?\\\\([^btnfr\\\\\"'])", "$1\\\\\\\\$2"); // replace \[ and\] with \\[ and \\]
+
                 writer.write(content);
             }
         });
