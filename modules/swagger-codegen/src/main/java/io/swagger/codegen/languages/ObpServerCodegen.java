@@ -166,11 +166,15 @@ public class ObpServerCodegen extends AbstractScalaCodegen implements CodegenCon
             for (int i = 0; i < items.length; ++i) {
                 if (items[i].matches("^\\{(.*)\\}$")) { // wrap in {}
                     String param = items[i].replace("{", "").replace("}", "").replace('-', '_');
-                    scalaPath = scalaPath + param.toUpperCase();
-                    if(endpointPath =="")
-                        endpointPath = param.toLowerCase();
-                    else 
-                        endpointPath = endpointPath + " :: " + param.toLowerCase();
+                    scalaPath = scalaPath + param.replaceAll("([a-z0-9])([A-Z][a-z0-9])", "$1_$2").toUpperCase();
+
+                    String convertedParam = param.contains("_") ? param.toLowerCase() : StringUtils.uncapitalize(param);
+
+                    if(endpointPath ==""){
+                        endpointPath = convertedParam;
+                    } else{
+                        endpointPath = endpointPath + " :: " + convertedParam;
+                    }
                     pathParamIndex++;
                 } else {
                     scalaPath = scalaPath + items[i];
